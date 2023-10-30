@@ -1,22 +1,31 @@
-from etl import load 
-import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql.types import LongType, FloatType, IntegerType, DateType
+import pyspark.sql.functions as F
+from etl import transform
+import pytest
+import re
 
 
-dff=load()
-dff.head()
 
-# # Define a function to check date format consistency
-# def check_date_format_consistency(date_column):
-#     date_format_udf = udf(lambda x: x.strftime('yyyy-MM-dd'), StringType())
-#     df_with_common_format = df.withColumn(date_column, date_format_udf(col(date_column)))
-#     unique_formats = df_with_common_format.select(date_column).distinct().count()
-#     return unique_formats
+spark = SparkSession \
+    .builder \
+    .appName("final_project") \
+    .master("local[*]")\
+    .config("spark.executor.memory", "2g")\
+    .config("spark.jars", "/opt/spark/jars/postgresql-42.6.0.jar") \
+    .getOrCreate()
 
-# # List of date-related columns
-# date_columns = ['Job Posting Date', 'AnotherDateColumn']  # Add other date columns as needed
 
-# # Pytest test function
-# @pytest.mark.parametrize("column", date_columns)
-# def test_date_format_consistency(column):
-#     unique_formats_count = check_date_format_consistency(column)
-#     assert unique_formats_count == 1, f"Date format in '{column}' is not consistent. Found {unique_formats_count} unique formats."
+dff=transform(spark)
+# dff.show(3)
+
+expected_date_format = 'yyyy-MM-dd'  
+date_columns_to_check = ['Job Posting Date']
+
+@pytest.mark.parametrize('date_column', date_columns_to_check)
+def test_date_format_consistency(date_column):
+    valid_dates = dff.filter(F.col(date_column).isNotNull())
+    date_format_check = valid_dates.withColumn("date_format_check",
+        F.to_date(F.col(date_column), expected_date_format))
+    inconsistent_dates = date_format_check.filter(F.col("date_format_check").isNull())
+    assert inconsistent_dates.count() == 0
