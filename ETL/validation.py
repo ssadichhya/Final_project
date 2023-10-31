@@ -1,9 +1,7 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.types import LongType, FloatType, IntegerType, DateType
 import pyspark.sql.functions as F
-from etl import transform
+from etl import clean
 import pytest
-import re
 
 
 
@@ -16,8 +14,9 @@ spark = SparkSession \
     .getOrCreate()
 
 
-dff=transform(spark)
+dff=clean(spark)
 # dff.show(3)
+
 
 expected_date_format = 'yyyy-MM-dd'  
 date_columns_to_check = ['Job Posting Date']
