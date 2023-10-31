@@ -3,14 +3,21 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import LongType, FloatType, IntegerType, DateType
 import pyspark.sql.functions as F
 import re
+import yaml
 
+# Define the path to your YAML file
+yaml_file_path = 'config.yaml'
+
+# Read the YAML file and parse it into a Python dictionary
+with open(yaml_file_path, 'r') as yaml_file:
+    config = yaml.safe_load(yaml_file)
 
 
 # %%
 def extract(spark):
         
     #csv path
-    csv = "/home/ubuntu/Desktop/final_project/Raw_Data/job_descriptions.csv"
+    csv = config['csv']["path"]
     #Read raw_data
     df = spark.read.csv(csv, header=True, inferSchema=False)
     return df
@@ -54,7 +61,7 @@ def transform(spark):
 def load(spark):
     new_df=transform(spark)
     ##Load the clean data in postgres
-    new_df.write.format('jdbc').options(url='jdbc:postgresql://localhost:5432/final_project',driver = 'org.postgresql.Driver', dbtable = 'job_description_clean', user="postgres",password="postgres" ).mode('overwrite').save()
+    new_df.write.format('jdbc').options(url=config['postgres']["url"],driver = config['postgres']["driver"], dbtable = config['postgres']["dbtable"], user=config['postgres']["user"],password=config['postgres']["password"]).mode('overwrite').save()
     return new_df
 
 # # %%
