@@ -4,7 +4,12 @@ from pyspark.sql.types import LongType, FloatType, IntegerType, DateType, MapTyp
 import pyspark.sql.functions as F
 import re
 import yaml
+import logger_file as lf
 
+
+
+logger = lf.setup_logs()
+logger.info(f"Logger initialized successfully!!")
 #define path to your yaml file
 yaml_file_path= 'config.yaml'
 
@@ -16,6 +21,7 @@ spark = SparkSession \
     .appName("final_project") \
     .config("spark.jars", config['spark']['path']) \
     .getOrCreate()
+logger.info(f"Spark Initialized Successfully!!!")
 
 # %%
 def extract(spark):
@@ -24,9 +30,10 @@ def extract(spark):
         csv = config['csv']['path']
         # Read raw_data
         df = spark.read.csv(csv, header=True, inferSchema=False)
+        logger.info(f"Data Extracted Successfully!!!")
         return df
     except Exception as e:
-        raise Exception(f"An error occurred during data extraction: {str(e)}")
+        logger.error(f"An error occurred during data extraction: {str(e)}")
         spark.stop()
 
 # %%
@@ -51,7 +58,6 @@ def clean(spark):
                .withColumn("longitude", df["longitude"].cast(FloatType()))\
                .withColumn("Company Size", df["Company Size"].cast(IntegerType()))\
                .withColumn("Job Posting Date", df["Job Posting Date"].cast(DateType()))
-        
         # sector_pattern = r'"Sector":"([^"]+)"'
 
         # # Use regexp_extract to extract the value of "Sector" into a new column "Sector"
@@ -60,12 +66,10 @@ def clean(spark):
         df = df.withColumn("Sector", F.regexp_replace(F.col("Sector"), '"', ''))
         df=df.drop("Company Profile")
 
-
-
-
+        logger.info(f"Data Cleaned Succesfully")
         return df
     except Exception as e:
-        raise Exception(f"An error occurred during data cleaning: {str(e)}")
+        logger.error(f"An error occurred during data cleaning: {str(e)}")
         spark.stop()
 
 
@@ -130,11 +134,11 @@ def transform(spark):
         .when(F.col("qualifications").startswith("P"), "PhD")
         .otherwise("Uncategorized"))
 
-
+        logger.info(f"Data transformed successfully!!!!")
         return new_df
 
     except Exception as e:
-        raise Exception(f"An error occurred during data transformation: {str(e)}")
+        logger.error(f"An error occurred during data transformation: {str(e)}")
         spark.stop()
 
 
@@ -145,11 +149,8 @@ def load(spark):
         dff=transform(spark)
         ##Load the clean data in postgres
         dff.write.format('jdbc').options(url=config['postgres']["url"],driver = config['postgres']["driver"], dbtable = config['postgres']["dbtable"], user=config['postgres']["user"],password=config['postgres']["password"]).mode('overwrite').save()
+        logger.info(f"Data loaded into Postgres Succesfully!!!")
         return dff
     except Exception as e:
-        raise Exception(f"An error occurred during loading the data: {str(e)}")
+        logger.error(f"An error occurred during loading the data: {str(e)}")
         spark.stop()    
-
-
-
-
