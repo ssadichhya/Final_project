@@ -1,6 +1,6 @@
 # %%
 from pyspark.sql import SparkSession
-from pyspark.sql.types import LongType, FloatType, IntegerType, DateType
+from pyspark.sql.types import LongType, FloatType, IntegerType, DateType, MapType
 import pyspark.sql.functions as F
 import re
 import yaml
@@ -29,6 +29,9 @@ def extract(spark):
         raise Exception(f"An error occurred during data extraction: {str(e)}")
         spark.stop()
 
+# %%
+df=extract(spark)
+df.select("Company Profile").show(truncate=False)
 
 # %%
 def clean(spark):
@@ -38,7 +41,7 @@ def clean(spark):
         df = df.withColumn("Company Size", F.when(F.col("Company Size") < 0, -F.col("Company Size")).otherwise(F.col("Company Size")))
         
         # List of columns to drop
-        dropped = ["Contact Person", "Contact", "Benefits", "Company Profile"]
+        dropped = ["Contact Person", "Contact", "Benefits"]
         # Drop columns
         df = df.drop(*dropped)
         
@@ -49,10 +52,23 @@ def clean(spark):
                .withColumn("Company Size", df["Company Size"].cast(IntegerType()))\
                .withColumn("Job Posting Date", df["Job Posting Date"].cast(DateType()))
         
+        # sector_pattern = r'"Sector":"([^"]+)"'
+
+        # # Use regexp_extract to extract the value of "Sector" into a new column "Sector"
+        # df = df.withColumn("Sector", F.regexp_extract(df["Company Profile"], sector_pattern, 1))
+        df = df.withColumn("Sector", F.substring_index(F.col("Company Profile"), '":"', -1))
+        df = df.withColumn("Sector", F.regexp_replace(F.col("Sector"), '"', ''))
+        df=df.drop("Company Profile")
+
+
+
+
         return df
     except Exception as e:
         raise Exception(f"An error occurred during data cleaning: {str(e)}")
         spark.stop()
+
+
 
 # %%
 #udf to calculate avg
@@ -133,6 +149,7 @@ def load(spark):
     except Exception as e:
         raise Exception(f"An error occurred during loading the data: {str(e)}")
         spark.stop()    
+
 
 
 
