@@ -79,4 +79,4 @@ def test_company_size_values():
     negative_rows = dff.filter(F.col("Company Size") < 0)
     assert negative_rows.count() == 0, "There are negative Company Size values"
 
-logger.info(f"Data Validated Successfully!!!")
+logger.info(f"Data Validated Successfully!!")

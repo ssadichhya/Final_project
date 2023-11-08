@@ -27,7 +27,7 @@ activate_venv_task = BashOperator(
 )
 
 
-# using file sensor to check for raw csv in raw_data folder
+# using file sensor to check for raw csv in raw_data 
 file_sensor = FileSensor(
     task_id = 'check_for_raw_file',
     poke_interval = 30,

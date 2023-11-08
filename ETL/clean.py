@@ -66,4 +66,3 @@ def clean(spark):
 
 
 # dff = clean(spark)
-# dff.printSchema()

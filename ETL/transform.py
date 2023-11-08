@@ -92,4 +92,3 @@ def transform():
         logger.error(f"An error occurred during data transformation: {str(e)}")
         spark.stop()
 
-#transform(spark)

@@ -40,4 +40,3 @@ def extract(spark):
         logger.error(f"An error occurred during data extraction: {str(e)}")
         spark.stop()
 
-#extract(spark)

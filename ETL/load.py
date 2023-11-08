@@ -29,7 +29,7 @@ logger.info(f"Spark Initialized Successfully!!!")
 def load():
     try:
         dff=transform()
-        ##Load the clean data in postgres
+        ##Load the clean data into postgres
         dff.write.format('jdbc').options(url=config['postgres']["url"],driver = config['postgres']["driver"], dbtable = config['postgres']["dbtable"], user=config['postgres']["user"],password=config['postgres']["password"]).mode('overwrite').save()
         logger.info(f"Data loaded into Postgres Succesfully!!!")
         return dff
