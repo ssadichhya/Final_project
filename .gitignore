@@ -1,0 +1,6 @@
+.venv/
+venv/
+/Raw_Data
+/ETL/config.yaml
+/ETL/etlEX.ipynb
+/
