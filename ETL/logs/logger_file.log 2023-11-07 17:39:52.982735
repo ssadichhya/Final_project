@@ -1,0 +1,12 @@
+Logger initialized successfully for extract file!!
+Spark Initialized Successfully for extract file!!!
+Data Extracted Successfully!!!
+Logger initialized successfully in clean file!!
+Spark Initialized Successfully for cleaning file!!!
+Got inside clean function
+Data Extracted Successfully!!!
+Data Cleaned Succesfully
+Logger initialized successfully for transform file!!
+Spark Initialized Successfully for transform file!!!
+Logger initialized successfully in clean!!
+Spark Initialized Successfully!!!

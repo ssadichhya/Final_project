@@ -1,0 +1,50 @@
+Logger initialized successfully in clean file!!
+Spark Initialized Successfully for cleaning file!!!
+Got inside clean function
+Data Extracted Successfully!!!
+Data Cleaned Succesfully
+Logger initialized successfully for transform file!!
+Spark Initialized Successfully for transform file!!!
+Got inside clean function
+Data Extracted Successfully!!!
+Data Cleaned Succesfully
+An error occurred during data transformation: 
+  An exception was thrown from the Python worker. Please see the stack trace below.
+Traceback (most recent call last):
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 814, in main
+    func, profiler, deserializer, serializer = read_udfs(pickleSer, infile, eval_type)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 650, in read_udfs
+    udfs.append(read_single_udf(pickleSer, infile, eval_type, runner_conf, udf_index=i))
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 375, in read_single_udf
+    f, return_type = read_command(pickleSer, infile)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 87, in read_command
+    command = serializer._read_with_length(file)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/serializers.py", line 174, in _read_with_length
+    return self.loads(obj)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/serializers.py", line 472, in loads
+    return cloudpickle.loads(obj, encoding=encoding)
+ModuleNotFoundError: No module named 'transform'
+
+Logger initialized successfully in clean!!
+Spark Initialized Successfully!!!
+Got inside clean function
+Data Extracted Successfully!!!
+Data Cleaned Succesfully
+An error occurred during data transformation: 
+  An exception was thrown from the Python worker. Please see the stack trace below.
+Traceback (most recent call last):
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 814, in main
+    func, profiler, deserializer, serializer = read_udfs(pickleSer, infile, eval_type)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 650, in read_udfs
+    udfs.append(read_single_udf(pickleSer, infile, eval_type, runner_conf, udf_index=i))
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 375, in read_single_udf
+    f, return_type = read_command(pickleSer, infile)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/worker.py", line 87, in read_command
+    command = serializer._read_with_length(file)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/serializers.py", line 174, in _read_with_length
+    return self.loads(obj)
+  File "/opt/spark/python/lib/pyspark.zip/pyspark/serializers.py", line 472, in loads
+    return cloudpickle.loads(obj, encoding=encoding)
+ModuleNotFoundError: No module named 'transform'
+
+An error occurred during loading the data: 'NoneType' object has no attribute 'write'
