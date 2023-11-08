@@ -31,7 +31,7 @@ def extract(spark):
         # CSV path
         csv = config['csv']['path']
         # Read raw_data
-        df = spark.read.csv(csv, header=True, inferSchema=False)
+        df = spark.read.csv(csv, header=True, inferSchema=True)
         logger.info(f"Data Extracted Successfully!!!")
         df.show(2)
         return df
@@ -40,3 +40,5 @@ def extract(spark):
         logger.error(f"An error occurred during data extraction: {str(e)}")
         spark.stop()
 
+df = extract(spark)
+df.printSchema()

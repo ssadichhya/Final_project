@@ -43,16 +43,15 @@ extract_data = BashOperator(
     dag=dag,
 )
 
+validate_data = BashOperator(
+    task_id = 'validate_data',
+    bash_command = f"pytest {Variable.get('location')}/Final_project/ETL/validation.py",
+    dag=dag,
+)
 
 clean_data = BashOperator(
     task_id = 'clean_data',
     bash_command = f"python3 {Variable.get('location')}/Final_project/ETL/clean.py",
-    dag=dag,
-)
-
-validate_data = BashOperator(
-    task_id = 'validate_data',
-    bash_command = f"pytest {Variable.get('location')}/Final_project/ETL/validation.py",
     dag=dag,
 )
 
@@ -68,4 +67,4 @@ load_data = BashOperator(
     dag=dag,
 )
 
-activate_venv_task >> file_sensor >> extract_data >> clean_data >> validate_data >> transform_data >> load_data
+activate_venv_task >> file_sensor >> extract_data >> validate_data >> clean_data >> transform_data >> load_data

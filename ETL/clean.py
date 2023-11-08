@@ -63,6 +63,3 @@ def clean(spark):
     except Exception as e:
         logger.error(f"An error occurred during data cleaning: {str(e)}")
         spark.stop()
-
-
-# dff = clean(spark)
