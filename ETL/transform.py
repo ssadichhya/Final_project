@@ -32,7 +32,7 @@ logger.info(f"Spark Initialized Successfully for transform file!!!")
 def transform():
     try:
         def calculate_average(range_str):
-            # Use regular expression to extract numbers
+            # Using regular expression to extract numbers
             numbers = re.findall(r'\d+', range_str)
             if len(numbers) == 2:
                 lower = int(numbers[0])
@@ -54,7 +54,6 @@ def transform():
         
         # Changing gender preference from "both" to "Male or Female"
         new_df = new_df.withColumn("Preference", F.when(F.col("Preference") == "Both", "Male or Female").otherwise(F.col("Preference")))
-        new_df.show()
 
         #Dividing companies into tiers according to the company size
 

@@ -33,7 +33,6 @@ def extract(spark):
         # Read raw_data
         df = spark.read.csv(csv, header=True, inferSchema=True)
         logger.info(f"Data Extracted Successfully!!!")
-        df.show(2)
         return df
     
     except Exception as e:

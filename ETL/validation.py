@@ -42,11 +42,13 @@ def test_date_format_consistency(date_column):
         F.to_date(F.col(date_column), expected_date_format))
     inconsistent_dates = date_format_check.filter(F.col("date_format_check").isNull())
     assert inconsistent_dates.count() == 0
+    logger.info(f"Test 1: Validation passed successfully")
 
 def test_column_name_values():
     expected_columns = ["Job Id", "experience", "qualifications", "Salary Range", "location", "country", "latitude", "longitude", "Work Type", "Company Size", "Job Posting Date", "preference","Contact Person", "contact",  "Job Title", "Role", "Job Portal", "Job Description","benefits", "skills", "responsibilities", "company", "Company Profile"]
     actual_columns = dff.columns
     assert set(actual_columns) == set(expected_columns)
+    logger.info(f"Test 2: Validation passed successfully")
 
 
 def test_dataset_schema_values():
@@ -78,4 +80,4 @@ def test_dataset_schema_values():
 
         # Check if the DataFrame schema matches the expected schema
     assert dff.schema == expected_schema, "DataFrame schema does not match the expected data types."
-    logger.info(f"Validation passed successfully")
+    logger.info(f"Test 3: Validation passed successfully")
