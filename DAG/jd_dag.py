@@ -27,7 +27,7 @@ activate_venv_task = BashOperator(
 )
 
 
-# using file sensor to check for raw csv in raw_data 
+# using file sensor to check for raw csv in raw_data folder
 file_sensor = FileSensor(
     task_id = 'check_for_raw_file',
     poke_interval = 30,
@@ -43,9 +43,10 @@ extract_data = BashOperator(
     dag=dag,
 )
 
+
 validate_data = BashOperator(
     task_id = 'validate_data',
-    bash_command = f"pytest {Variable.get('location')}/Final_project/ETL/validation.py",
+    bash_command = f"pytest {Variable.get('location')}/Final_project/ETL/validation.py || exit 1",
     dag=dag,
 )
 

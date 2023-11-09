@@ -31,7 +31,6 @@ logger.info(f"Spark Initialized Successfully for validation file!!!")
 
 
 dff=extract(spark)
-# dff.show(3)
 
 expected_date_format = 'yyyy-MM-dd'  
 date_columns_to_check = ['Job Posting Date']
@@ -48,6 +47,7 @@ def test_column_name_values():
     expected_columns = ["Job Id", "experience", "qualifications", "Salary Range", "location", "country", "latitude", "longitude", "Work Type", "Company Size", "Job Posting Date", "preference","Contact Person", "contact",  "Job Title", "Role", "Job Portal", "Job Description","benefits", "skills", "responsibilities", "company", "Company Profile"]
     actual_columns = dff.columns
     assert set(actual_columns) == set(expected_columns)
+
 
 def test_dataset_schema_values():
     expected_schema = StructType([

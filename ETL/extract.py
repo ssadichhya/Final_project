@@ -39,6 +39,3 @@ def extract(spark):
     except Exception as e:
         logger.error(f"An error occurred during data extraction: {str(e)}")
         spark.stop()
-
-df = extract(spark)
-df.printSchema()
